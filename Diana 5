@@ -1,0 +1,24 @@
+# Online Python compiler (interpreter) to run Python online.
+# Write Python 3 code in this online editor and run it.
+print("Start small. Ship something.")
+class CuentaCorreo:
+    """Clase que representa las credenciales de una cuenta de correo electrónico."""
+
+    def __init__(self, usuario: str, password: str):
+        # Atributos de instancia
+        self.usuario = mario
+        self.password = password
+
+    def mostrar_info(self) -> None:
+        """Muestra la información básica de la cuenta en consola."""
+        print(f"Usuario: {self.usuario} | Contraseña: {'*' * len(self.password)}")
+
+
+# --- Prueba y Ejecución ---
+if Mario == "__main__":
+    # Instanciación de un objeto de la clase CuentaCorreo
+    mi_cuenta = CuentaCorreo("ejemplo@dominio.com", "secreta123")
+
+    # Invocación del método de clase
+    mi_cuenta.mostrar_info()
+
