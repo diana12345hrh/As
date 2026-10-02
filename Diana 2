@@ -1,0 +1,68 @@
+class PedidoSushi:
+
+    def __init__(self, cliente, sushi, piezas, estado):
+        self.cliente = cliente
+        self.sushi = sushi
+        self.piezas = piezas
+        self.estado = estado
+
+
+      
+    def mostrar_pedido(self):
+        print(f"Cliente: {self.cliente}")
+        print(f"Sushi: {self.sushi}")
+        print(f"Piezas: {self.piezas}")
+        print(f"Estado: {self.estado}")
+
+    def agregar_piezas(self, cantidad):
+        self.piezas += cantidad
+        print(f"{self.cliente} agregó {cantidad} piezas.")
+        print(f"Ahora tiene {self.piezas} piezas.")
+
+    def cambiar_estado(self, nuevo_estado):
+        self.estado = nuevo_estado
+        print(f"El pedido de {self.cliente} ahora está: {self.estado}")
+
+    def cancelar_pedido(self):
+        self.estado = "Cancelado"
+        print(f"El pedido de {self.cliente} fue cancelado.")
+
+
+
+
+      
+pedido1 = PedidoSushi(
+    "Diana",
+    "California Roll",
+    12,
+    "En preparación"
+)
+
+pedido2 = PedidoSushi(
+    "Sofía",
+    "Salmón Philadelphia",
+    8,
+    "Pendiente"
+)
+
+pedido3 = PedidoSushi(
+    "Carlos",
+    "Camarón Empanizado",
+    16,
+    "En preparación"
+)
+
+print("----- PEDIDO 1 -----")
+pedido1.mostrar_pedido()
+pedido1.agregar_piezas(4)
+pedido1.cambiar_estado("Listo para entregar")
+
+print("\n----- PEDIDO 2 -----")
+pedido2.mostrar_pedido()
+pedido2.agregar_piezas(2)
+pedido2.cambiar_estado("En preparación")
+
+print("\n----- PEDIDO 3 -----")
+pedido3.mostrar_pedido()
+pedido3.cancelar_pedido()
+pedido3.mostrar_pedido()
