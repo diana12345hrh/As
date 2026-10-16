@@ -1,0 +1,24 @@
+class Animal:
+    def hacer_sonido(self):
+        # Método base que será personalizado por las clases hijas
+        pass
+
+class Perro(Animal):
+    def hacer_sonido(self):
+        return "¡Guau! 🐶"
+
+class Gato(Animal):
+    def hacer_sonido(self):
+        return "¡Miau! 🐱"
+
+class Vaca(Animal):
+    def hacer_sonido(self):
+        return "¡Muuu! 🐮"
+
+# --- Uso del polimorfismo ---
+# Una lista que contiene diferentes tipos de objetos
+animales = [Perro(), Gato(), Vaca()]
+
+# Iteramos llamando al mismo método 'hacer_sonido()' en cada objeto
+for animal in animales:
+    print(animal.hacer_sonido())
