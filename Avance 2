@@ -1,0 +1,123 @@
+"""
+===============================================================================
+SISTEMA DE GESTIÓN DE EMPLEADOS Y ROLES (SISTEMA POO)
+===============================================================================
+Descripción:
+Este programa modela un sistema de gestión de personal implementando los cuatro 
+pilares fundamentales de la Programación Orientada a Objetos (POO) en Python:
+1. Encapsulamiento: Uso de atributos privados/protegidos y métodos getter/setter.
+2. Herencia: Creación de clases derivadas a partir de una clase base.
+3. Uso de super(): Llamada a métodos y constructores de la clase padre.
+4. Polimorfismo / Sobrescritura: Implementación específica del método calcular_salario.
+===============================================================================
+"""
+
+# =============================================================================
+# 1. Creación de la Clase Base
+# =============================================================================
+class Empleado:
+    """Clase principal que representa a un empleado genérico."""
+
+    def __init__(self, nombre, id_empleado, salario_base):
+        # Aplicación de Encapsulamiento: Atributos privados (__nombre, __salario_base)
+        self.__nombre = nombre
+        self.id_empleado = id_empleado  # Atributo público
+        self.__salario_base = salario_base
+
+    # Getters y Setters para demostrar el Encapsulamiento
+    def get_nombre(self):
+        return self.__nombre
+
+    def set_nombre(self, nombre):
+        self.__nombre = nombre
+
+    def get_salario_base(self):
+        return self.__salario_base
+
+    def set_salario_base(self, salario_base):
+        if salario_base > 0:
+            self.__salario_base = salario_base
+        else:
+            print("El salario base debe ser mayor a 0.")
+
+    def calcular_salario(self):
+        """Método base que será sobrescrito en las clases hijas."""
+        return self.__salario_base
+
+    def mostrar_informacion(self):
+        """Muestra los detalles del empleado."""
+        return f"ID: {self.id_empleado} | Nombre: {self.__nombre} | Salario Base: ${self.__salario_base:.2f}"
+
+
+# =============================================================================
+# 2. Uso de Herencia y super()
+# =============================================================================
+class Gerente(Empleado):
+    """Clase derivada que representa a un Gerente."""
+
+    def __init__(self, nombre, id_empleado, salario_base, bono_gerencial):
+        # Uso de super() para reutilizar el constructor de la clase base
+        super().__init__(nombre, id_empleado, salario_base)
+        self.__bono_gerencial = bono_gerencial
+
+    # =========================================================================
+    # 3. Sobrescritura de Métodos (Polimorfismo)
+    # =========================================================================
+    def calcular_salario(self):
+        # Polimorfismo: Calcula el salario total agregando el bono gerencial
+        salario_base = super().calcular_salario()
+        return salario_base + self.__bono_gerencial
+
+    def mostrar_informacion(self):
+        info_base = super().mostrar_informacion()
+        return f"[GERENTE] {info_base} | Bono: ${self.__bono_gerencial:.2f} | Salario Total: ${self.calcular_salario():.2f}"
+
+
+class Desarrollador(Empleado):
+    """Clase derivada que representa a un Desarrollador."""
+
+    def __init__(self, nombre, id_empleado, salario_base, lenguaje_principal, horas_extra, pago_hora_extra):
+        # Uso de super()
+        super().__init__(nombre, id_empleado, salario_base)
+        self.lenguaje_principal = lenguaje_principal
+        self.horas_extra = horas_extra
+        self.pago_hora_extra = pago_hora_extra
+
+    # =========================================================================
+    # Sobrescritura de Métodos (Polimorfismo)
+    # =========================================================================
+    def calcular_salario(self):
+        # Polimorfismo: Suma las horas extra trabajadas al salario base
+        salario_base = super().calcular_salario()
+        pago_extra = self.horas_extra * self.pago_hora_extra
+        return salario_base + pago_extra
+
+    def mostrar_informacion(self):
+        info_base = super().mostrar_informacion()
+        return f"[DESARROLLADOR] {info_base} | Lenguaje: {self.lenguaje_principal} | Salario Total: ${self.calcular_salario():.2f}"
+
+
+# =============================================================================
+# 4. Instanciación y Pruebas
+# =============================================================================
+if __name__ == "__main__":
+    print("--- INICIANDO PRUEBAS DEL SISTEMA ---\n")
+
+    # Instanciación de objetos
+    gerente1 = Gerente(nombre="Carlos Mendoza", id_empleado="G-001", salario_base=5000.0, bono_gerencial=1500.0)
+    dev1 = Desarrollador(nombre="Ana Gómez", id_empleado="D-101", salario_base=3000.0, lenguaje_principal="Python", horas_extra=10, pago_hora_extra=25.0)
+
+    # Demostración de Polimorfismo mediante una lista de empleados
+    lista_empleados = [gerente1, dev1]
+
+    print("--- INFORMACIÓN DE LA NOMINA ---")
+    for emp in lista_empleados:
+        # Se ejecuta la versión sobrescrita del método correspondiente a cada clase
+        print(emp.mostrar_informacion())
+
+    print("\n--- PRUEBA DE ENCAPSULAMIENTO ---")
+    # Intentar modificar el salario base usando el setter con encapsulamiento
+    print(f"Salario base anterior de {dev1.get_nombre()}: ${dev1.get_salario_base()}")
+    dev1.set_salario_base(3200.0)
+    print(f"Nuevo salario base de {dev1.get_nombre()}: ${dev1.get_salario_base()}")
+    print(f"Nuevo salario total calculado: ${dev1.calcular_salario()}")
