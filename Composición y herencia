@@ -1,0 +1,73 @@
+from abc import ABC, abstractmethod
+
+
+# ==========================================
+# 1. COMPONENTES (COMPOSICIÓN: "TIENE UN")
+# ==========================================
+
+class Material:
+    """Componente que define la tela y sus propiedades."""
+    def __init__(self, nombre: str, es_sostenible: bool = False):
+        self.nombre = nombre
+        self.es_sostenible = es_sostenible
+
+    def obtener_descripcion(self) -> str:
+        eco = "Ecológico/Sostenible" if self.es_sostenible else "Convencional"
+        return f"Tela: {self.nombre} ({eco})"
+
+
+class Estilo:
+    """Componente que define la estética de la prenda."""
+    def __init__(self, nombre: str, temporada: str):
+        self.nombre = nombre        # Ej: Minimalista, Vintage, Urbano
+        self.temporada = temporada  # Ej: Primavera-Verano, Otoño-Invierno
+
+    def obtener_detalles(self) -> str:
+        return f"Estilo: {self.nombre} | Temporada: {self.temporada}"
+
+
+# ==========================================
+# 2. CLASE BASE (HERENCIA + COMPOSICIÓN)
+# ==========================================
+
+class PrendaDeModa(ABC):
+    """
+    Clase abstracta principal.
+    Usa COMPOSICIÓN: Toda prenda TIENE UN material y UN estilo.
+    """
+    def __init__(self, nombre: str, precio_base: float, material: Material, estilo: Estilo):
+        self.nombre = nombre
+        self.precio_base = precio_base
+        self.material = material  # Composición
+        self.estilo = estilo      # Composición
+
+    def mostrar_ficha_tecnica(self):
+        print(f"\n--- Ficha Técnica: {self.nombre} ---")
+        print(f"Precio: ${self.precio_base:.2f}")
+        print(self.material.obtener_descripcion())
+        print(self.estilo.obtener_detalles())
+
+    @abstractmethod
+    def calcular_precio_final((self) -> float:
+        """Cada tipo de prenda puede tener costos o impuestos específicos."""
+        pass
+
+
+# ==========================================
+# 3. SUBCLASES ESPECIALIZADAS (HERENCIA: "ES UN")
+# ==========================================
+
+class Camisa(PrendaDeModa):
+    """La Camisa ES UNA PrendaDeModa."""
+    def __init__(self, nombre: str, precio_base: float, material: Material, estilo: Estilo, tipo_cuello: str):
+        super().__init__(nombre, precio_base, material, estilo)
+        self.tipo_cuello = tipo_cuello
+
+    def calcular_precio_final(self) -> float:
+        # Si la tela es sostenible, tiene un pequeño margen adicional por certificación
+        recargo = 1.10 if self.material.es_sostenible else 1.0
+        return self.precio_base * recargo
+
+    def mostrar_ficha_tecnica(self):
+        super().mostrar_ficha_tecnica()
+        print(f"Tipo de Cuello: {self.tipo
