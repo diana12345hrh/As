@@ -1,0 +1,126 @@
+
+class NotaOlfativa:
+    """Clase usada para composición: representa una esencia dentro de la pirámide olfativa."""
+
+    def __init__(self, nombre: str, familia: str, fase: str, costo_esencia: float):
+        self.nombre = nombre
+        self.familia = familia # Ej. Cítrica, Floral, Amaderada, Oriental
+        self.fase = fase # Salida, Corazón o Fondo
+        self.costo_esencia = costo_esencia
+
+    def __str__(self) -> str:
+        return f"{self.nombre} [{self.fase} - {self.familia}]"
+
+
+class Frasco:
+    """Clase usada para composición: representa el envase y atomizador del producto."""
+
+    def __init__(self, material: str, capacidad_ml: int, atomizador: str, costo_envase: float):
+        self.material = material
+        self.capacidad_ml = capacidad_ml
+        self.atomizador = atomizador
+        self.costo_envase = costo_envase
+
+    def __str__(self) -> str:
+        return f"{self.material} ({self.capacidad_ml} ml, {self.atomizador})"
+
+
+class Fragancia:
+    """Clase Base que modela cualquier creación aromática de la perfumería."""
+
+    def __init__(
+        self,
+        nombre: str,
+        casa_perfumista: str,
+        frasco: Frasco,
+        costo_formulacion: float = 15.0,
+    ):
+        self.nombre = nombre
+        self.casa_perfumista = casa_perfumista
+        self.frasco = frasco # Composición (1 a 1)
+        self.costo_formulacion = costo_formulacion
+        self.notas: list[NotaOlfativa] = [] # Composición (1 a muchos)
+
+    def agregar_nota(self, nota: NotaOlfativa) -> None:
+        self.notas.append(nota)
+
+    def calcular_costo_produccion(self) -> float:
+        costo_notas = sum(nota.costo_esencia for nota in self.notas)
+        return self.frasco.costo_envase + costo_notas + self.costo_formulacion
+
+    def calcular_precio_venta(self) -> float:
+        # Margen base del 60% sobre el costo de producción
+        return self.calcular_costo_produccion() * 1.60
+
+    def obtener_ficha_olfativa(self) -> str:
+        piramide = (
+            "\n • ".join(str(n) for n in self.notas)
+            if self.notas
+            else "Sin notas registradas"
+        )
+        return (
+            f"Fragancia: {self.nombre} ({self.casa_perfumista})\n"
+            f" Presentación: {self.frasco}\n"
+            f" Pirámide Olfativa:\n • {piramide}"
+        )
+
+
+class Perfume(Fragancia):
+    """Subclase que hereda de Fragancia y representa extractos de alta concentración."""
+
+    def __init__(
+        self,
+        nombre: str,
+        casa_perfumista: str,
+        frasco: Frasco,
+        concentracion_porcentaje: float,
+        fijacion_horas: int,
+    ):
+        super().__init__(nombre, casa_perfumista, frasco)
+        self.concentracion_porcentaje = concentracion_porcentaje
+        self.fijacion_horas = fijacion_horas
+
+    def calcular_precio_venta(self) -> float:
+        # Recargo adicional por alta pureza y concentración de aceites esenciales
+        recargo_pureza = self.concentracion_porcentaje * 1.25
+        return super().calcular_precio_venta() + recargo_pureza
+
+    def obtener_ficha_olfativa(self) -> str:
+        ficha_base = super().obtener_ficha_olfativa()
+        return (
+            f"{ficha_base}\n"
+            f" Categoría: Eau de Parfum ({self.concentracion_porcentaje}% esencia)\n"
+            f" Fijación estimada: {self.fijacion_horas} horas\n"
+            f" Precio al público: ${self.calcular_precio_venta():.2f}"
+        )
+
+
+class Colonia(Fragancia):
+    """Subclase que hereda de Fragancia y representa fórmulas ligeras y refrescantes."""
+
+    def __init__(
+        self,
+        nombre: str,
+        casa_perfumista: str,
+        frasco: Frasco,
+        sensacion: str,
+        es_unisex: bool,
+    ):
+        super().__init__(nombre, casa_perfumista, frasco)
+        self.sensacion = sensacion
+        self.es_unisex = es_unisex
+
+    def calcular_precio_venta(self) -> float:
+        # Factor comercial más accesible al tener mayor proporción de base alcohólica
+        return super().calcular_precio_venta() * 0.85
+
+    def obtener_ficha_olfativa(self) -> str:
+        ficha_base = super().obtener_ficha_olfativa()
+        publico = "Unisex" if self.es_unisex else "Clásico"
+        return (
+            f"{ficha_base}\n"
+            f" Categoría: Eau de Cologne ({self.sensacion} | Perfil: {publico})\n"
+            f" Precio al público: ${self.calcular_precio_venta():.2f}"
+        )
+
+      
