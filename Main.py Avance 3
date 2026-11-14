@@ -1,0 +1,55 @@
+
+from modelos import Colonia, Frasco, NotaOlfativa, Perfume
+
+
+def ejecutar_pruebas():
+    # 1. Instanciación de frascos (Composición 1 a 1)
+    frasco_cristal = Frasco(
+        material="Cristal Tallado Ahumado",
+        capacidad_ml=100,
+        atomizador="Spray micrométrico dorado",
+        costo_envase=14.50,
+    )
+    frasco_ligero = Frasco(
+        material="Vidrio Esmerilado",
+        capacidad_ml=200,
+        atomizador="Splash / Atomizador clásico",
+        costo_envase=9.00,
+    )
+
+    # 2. Instanciación de un Perfume (Subclase 1)
+    noche_ambar = Perfume(
+        nombre="Noche de Ámbar",
+        casa_perfumista="Atelier Botanique",
+        frasco=frasco_cristal,
+        concentracion_porcentaje=22.0,
+        fijacion_horas=12,
+    )
+    noche_ambar.agregar_nota(NotaOlfativa("Pimienta Rosa", "Especiada", "Salida", 6.50))
+    noche_ambar.agregar_nota(NotaOlfativa("Rosa de Damasco", "Floral", "Corazón", 11.00))
+    noche_ambar.agregar_nota(NotaOlfativa("Sándalo y Ámbar", "Amaderada", "Fondo", 14.00))
+
+    # 3. Instanciación de una Colonia (Subclase 2)
+    brisa_mediterranea = Colonia(
+        nombre="Brisa Mediterránea",
+        casa_perfumista="Maison Citrus",
+        frasco=frasco_ligero,
+        sensacion="Cítrica revitalizante",
+        es_unisex=True,
+    )
+    brisa_mediterranea.agregar_nota(NotaOlfativa("Bergamota de Calabria", "Cítrica", "Salida", 5.00))
+    brisa_mediterranea.agregar_nota(NotaOlfativa("Neroli", "Floral", "Corazón", 7.20))
+    brisa_mediterranea.agregar_nota(NotaOlfativa("Almizcle Blanco", "Almizclada", "Fondo", 4.80))
+
+    # 4. Ejecución de pruebas y polimorfismo
+    vitrina_perfumeria = [noche_ambar, brisa_mediterranea]
+
+    for fragancia in vitrina_perfumeria:
+        print("=" * 60)
+        print(fragancia.obtener_ficha_olfativa())
+    print("=" * 60)
+
+
+if __name__ == "__main__":
+    ejecutar_pruebas()
+
